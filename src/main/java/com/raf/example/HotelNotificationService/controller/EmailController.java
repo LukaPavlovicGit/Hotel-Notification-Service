@@ -1,4 +1,4 @@
-package com.raf.example.HotelNotificationService.Controller;
+package com.raf.example.HotelNotificationService.controller;
 
 import com.raf.example.HotelNotificationService.dto.EmailNotificationDto;
 import com.raf.example.HotelNotificationService.dto.SentEmailDto;
