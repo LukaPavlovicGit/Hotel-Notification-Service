@@ -21,15 +21,16 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/allSentAdmin")
+    @GetMapping("/allSent")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
-    public ResponseEntity<List<SentEmailDto>> getAllSentEmailsAdmin(@RequestHeader("Authorization") String authorization) {
-        return new ResponseEntity<List<SentEmailDto>>(emailService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<SentEmailDto>> getAllSentEmails(@RequestHeader("Authorization") String authorization) {
+        return new ResponseEntity<>(emailService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/allSent/{email}")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<List<SentEmailDto>> getAllSentEmails(@RequestHeader("Authorization") String authorization,@PathVariable("email") String email) {
-        return new ResponseEntity<List<SentEmailDto>>(emailService.findAllByEmail(email), HttpStatus.OK);
+    public ResponseEntity<List<SentEmailDto>> getAllSentEmailsByEmail(@RequestHeader("Authorization") String authorization,
+                                                                      @PathVariable("email") String email) {
+        return new ResponseEntity<>(emailService.findAllByEmail(email), HttpStatus.OK);
     }
     /*@GetMapping("/filter/{email}/{type}/{date}")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
@@ -39,18 +40,20 @@ public class EmailController {
     }*/
     @GetMapping("/type")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
-    public ResponseEntity<List<EmailNotificationDto>> getAllNotificationtypes(@RequestHeader("Authorization") String authorization){
-        return new ResponseEntity<List<EmailNotificationDto>>(emailService.getAllNotificationTypes(),HttpStatus.OK);
+    public ResponseEntity<List<EmailNotificationDto>> getAllNotificationTypes(@RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<>(emailService.getAllNotificationTypes(),HttpStatus.OK);
     }
-    @PostMapping("/type")
+    @PostMapping("/update")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
-    public ResponseEntity<Void> changeNotificationType(@RequestHeader("Authorization") String authorization, @RequestBody @Valid EmailNotificationDto dto){
+    public ResponseEntity<Void> changeNotificationType(@RequestHeader("Authorization") String authorization,
+                                                       @RequestBody @Valid EmailNotificationDto dto){
         emailService.editNotificationType(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping("/type/{typeId}")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
-    public ResponseEntity<Void> deleteNotificationType(@RequestHeader("Authorization") String authorization, @PathVariable("typeId") Long id){
+    public ResponseEntity<Void> deleteNotificationType(@RequestHeader("Authorization") String authorization,
+                                                       @PathVariable("typeId") Long id){
         emailService.deleteType(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
