@@ -74,6 +74,7 @@ public class EmailService {
     public void editNotificationType(EmailNotificationDto dto){
         EmailNotification emailNotification = notificationRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException(String
                 .format("Notification type with id: %d not found.", dto.getId())));
+        emailNotification.setType(dto.getType());
         emailNotification.setText(dto.getText());
         notificationRepository.save(emailNotification);
     }

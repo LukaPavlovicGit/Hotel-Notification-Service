@@ -21,12 +21,12 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/allSent")
+    @GetMapping("/all")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<List<SentEmailDto>> getAllSentEmails(@RequestHeader("Authorization") String authorization) {
         return new ResponseEntity<>(emailService.findAll(), HttpStatus.OK);
     }
-    @GetMapping("/allSent/{email}")
+    @GetMapping("/all/{email}")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
     public ResponseEntity<List<SentEmailDto>> getAllSentEmailsByEmail(@RequestHeader("Authorization") String authorization,
                                                                       @PathVariable("email") String email) {
@@ -38,7 +38,7 @@ public class EmailController {
             ,@PathVariable("type") String type, @PathVariable("date") String date) {
         return new ResponseEntity<SentEmailListDto>(emailService.filterEmails(email, type, date), HttpStatus.OK);
     }*/
-    @GetMapping("/type")
+    @GetMapping("/all/type")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<List<EmailNotificationDto>> getAllNotificationTypes(@RequestHeader("Authorization") String authorization){
         return new ResponseEntity<>(emailService.getAllNotificationTypes(),HttpStatus.OK);
