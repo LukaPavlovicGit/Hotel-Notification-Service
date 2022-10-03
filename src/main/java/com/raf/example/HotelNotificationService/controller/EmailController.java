@@ -3,6 +3,7 @@ package com.raf.example.HotelNotificationService.controller;
 import com.raf.example.HotelNotificationService.dto.EmailNotificationDto;
 import com.raf.example.HotelNotificationService.dto.SentEmailDto;
 import com.raf.example.HotelNotificationService.security.CheckSecurity;
+import com.raf.example.HotelNotificationService.security.SecurityAspect;
 import com.raf.example.HotelNotificationService.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.List;
 public class EmailController {
 
     private EmailService emailService;
+    private SecurityAspect securityAspect;
 
-    public EmailController(EmailService emailService) {
+    public EmailController(EmailService emailService, SecurityAspect securityAspect) {
         this.emailService = emailService;
+        this.securityAspect = securityAspect;
     }
 
     @GetMapping("/all")
@@ -26,10 +29,11 @@ public class EmailController {
     public ResponseEntity<List<SentEmailDto>> getAllSentEmails(@RequestHeader("Authorization") String authorization) {
         return new ResponseEntity<>(emailService.findAll(), HttpStatus.OK);
     }
-    @GetMapping("/all/{email}")
+    @GetMapping("/allByEmail/")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<List<SentEmailDto>> getAllSentEmailsByEmail(@RequestHeader("Authorization") String authorization,
-                                                                      @PathVariable("email") String email) {
+    public ResponseEntity<List<SentEmailDto>> getAllByCurrentUserEmail(@RequestHeader("Authorization") String authorization) {
+
+        String email = securityAspect.getUserEmail(authorization);
         return new ResponseEntity<>(emailService.findAllByEmail(email), HttpStatus.OK);
     }
     /*@GetMapping("/filter/{email}/{type}/{date}")
