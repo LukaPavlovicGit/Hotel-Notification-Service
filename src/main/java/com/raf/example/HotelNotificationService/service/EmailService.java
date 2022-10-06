@@ -10,6 +10,8 @@ import com.raf.example.HotelNotificationService.dto.MessageDto;
 import com.raf.example.HotelNotificationService.dto.SentEmailDto;
 import com.raf.example.HotelNotificationService.emailmapper.EmailMapper;
 import com.raf.example.HotelNotificationService.exception.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -85,13 +87,13 @@ public class EmailService {
         notificationRepository.deleteById(en.getId());
     }
 
-    public List<EmailNotificationDto> getAllNotificationTypes() {
+    public Page<EmailNotificationDto> getAllNotificationTypes(Pageable pageable) {
 
         List<EmailNotificationDto> dto = new ArrayList<>();
         List<EmailNotification> all = notificationRepository.findAll();
-        all.forEach(en->{
+        all.forEach( en ->{
             dto.add(emailMapper.entityToDtoType(en));
         });
-        return dto;
+        return notificationRepository.findAll(pageable).map(emailMapper::entityToDtoType);
     }
 }

@@ -5,9 +5,12 @@ import com.raf.example.HotelNotificationService.dto.SentEmailDto;
 import com.raf.example.HotelNotificationService.security.CheckSecurity;
 import com.raf.example.HotelNotificationService.security.SecurityAspect;
 import com.raf.example.HotelNotificationService.service.EmailService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -44,8 +47,9 @@ public class EmailController {
     }*/
     @GetMapping("/all/type")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
-    public ResponseEntity<List<EmailNotificationDto>> getAllNotificationTypes(@RequestHeader("Authorization") String authorization){
-        return new ResponseEntity<>(emailService.getAllNotificationTypes(),HttpStatus.OK);
+    public ResponseEntity<Page<EmailNotificationDto>> getAllNotificationTypes(@RequestHeader("Authorization") String authorization,
+                                                                              @ApiIgnore Pageable pageable){
+        return new ResponseEntity<>(emailService.getAllNotificationTypes(pageable),HttpStatus.OK);
     }
     @PostMapping("/update")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
