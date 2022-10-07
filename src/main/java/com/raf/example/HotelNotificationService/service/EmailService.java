@@ -2,9 +2,8 @@ package com.raf.example.HotelNotificationService.service;
 
 import com.raf.example.HotelNotificationService.Repository.NotificationRepository;
 import com.raf.example.HotelNotificationService.Repository.SentEmailRepository;
-import com.raf.example.HotelNotificationService.domain.EmailNotification;
+import com.raf.example.HotelNotificationService.domain.EmailNotificationType;
 import com.raf.example.HotelNotificationService.domain.SentEmail;
-import com.raf.example.HotelNotificationService.dto.EmailDto;
 import com.raf.example.HotelNotificationService.dto.EmailNotificationDto;
 import com.raf.example.HotelNotificationService.dto.MessageDto;
 import com.raf.example.HotelNotificationService.dto.SentEmailDto;
@@ -37,7 +36,7 @@ public class EmailService {
 
     public EmailNotificationDto sendMessage(MessageDto messageDto){
 
-        EmailNotification en = notificationRepository.findEmailNotificationByType(messageDto.getType())
+        EmailNotificationType en = notificationRepository.findEmailNotificationByType(messageDto.getType())
                 .orElseThrow(() -> new NotFoundException(String.format("Notification type not found.")));
         SimpleMailMessage message = new SimpleMailMessage();
         String text = en.getText();
@@ -74,7 +73,7 @@ public class EmailService {
     }
 
     public void editNotificationType(EmailNotificationDto dto){
-        EmailNotification emailNotification = notificationRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException(String
+        EmailNotificationType emailNotification = notificationRepository.findById(dto.getId()).orElseThrow(() -> new NotFoundException(String
                 .format("Notification type with id: %d not found.", dto.getId())));
         emailNotification.setType(dto.getType());
         emailNotification.setText(dto.getText());
@@ -82,7 +81,7 @@ public class EmailService {
     }
 
     public void deleteType(Long id) {
-        EmailNotification en = notificationRepository.findById(id).orElseThrow(() -> new NotFoundException(String
+        EmailNotificationType en = notificationRepository.findById(id).orElseThrow(() -> new NotFoundException(String
                 .format("Notification type with id: %d not found.", id)));
         notificationRepository.deleteById(en.getId());
     }
@@ -90,7 +89,7 @@ public class EmailService {
     public Page<EmailNotificationDto> getAllNotificationTypes(Pageable pageable) {
 
         List<EmailNotificationDto> dto = new ArrayList<>();
-        List<EmailNotification> all = notificationRepository.findAll();
+        List<EmailNotificationType> all = notificationRepository.findAll();
         all.forEach( en ->{
             dto.add(emailMapper.entityToDtoType(en));
         });

@@ -1,6 +1,6 @@
 package com.raf.example.HotelNotificationService.emailmapper;
 
-import com.raf.example.HotelNotificationService.domain.EmailNotification;
+import com.raf.example.HotelNotificationService.domain.EmailNotificationType;
 import com.raf.example.HotelNotificationService.domain.SentEmail;
 import com.raf.example.HotelNotificationService.dto.EmailNotificationDto;
 import com.raf.example.HotelNotificationService.dto.SentEmailDto;
@@ -20,7 +20,7 @@ public class EmailMapper {
         return dto;
     }
 
-    public EmailNotificationDto entityToDtoType(EmailNotification entity){
+    public EmailNotificationDto entityToDtoType(EmailNotificationType entity){
         EmailNotificationDto dto = new EmailNotificationDto();
         dto.setId(entity.getId());
         dto.setType(entity.getType());

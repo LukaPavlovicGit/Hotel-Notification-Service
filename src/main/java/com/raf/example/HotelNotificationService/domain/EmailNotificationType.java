@@ -3,16 +3,16 @@ package com.raf.example.HotelNotificationService.domain;
 import javax.persistence.*;
 
 @Entity
-public class EmailNotification {
+public class EmailNotificationType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String type;
     private String text;
 
-    public EmailNotification(){}
+    public EmailNotificationType(){}
 
-    public EmailNotification(String type, String text) {
+    public EmailNotificationType(String type, String text) {
         this.type = type;
         this.text = text;
     }
