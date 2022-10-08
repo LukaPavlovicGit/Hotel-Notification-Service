@@ -32,19 +32,15 @@ public class EmailController {
     public ResponseEntity<List<SentEmailDto>> getAllSentEmails(@RequestHeader("Authorization") String authorization) {
         return new ResponseEntity<>(emailService.findAll(), HttpStatus.OK);
     }
-    @GetMapping("/allByEmail/")
+    @GetMapping("/allByEmail")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<List<SentEmailDto>> getAllByCurrentUserEmail(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<Page<SentEmailDto>> getAllByCurrentUserEmail(@RequestHeader("Authorization") String authorization,
+                                                                       @ApiIgnore Pageable pageable) {
 
         String email = securityAspect.getUserEmail(authorization);
-        return new ResponseEntity<>(emailService.findAllByEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(emailService.findAllByEmail(email,pageable), HttpStatus.OK);
     }
-    /*@GetMapping("/filter/{email}/{type}/{date}")
-    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<SentEmailListDto> getAllEmailsFiltered(@RequestHeader("Authorization") String authorization,@PathVariable("email") String email
-            ,@PathVariable("type") String type, @PathVariable("date") String date) {
-        return new ResponseEntity<SentEmailListDto>(emailService.filterEmails(email, type, date), HttpStatus.OK);
-    }*/
+
     @GetMapping("/all/type")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<Page<EmailNotificationDto>> getAllNotificationTypes(@RequestHeader("Authorization") String authorization,

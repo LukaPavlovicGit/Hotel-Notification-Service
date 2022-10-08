@@ -10,6 +10,7 @@ import com.raf.example.HotelNotificationService.dto.SentEmailDto;
 import com.raf.example.HotelNotificationService.emailmapper.EmailMapper;
 import com.raf.example.HotelNotificationService.exception.NotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -62,14 +63,14 @@ public class EmailService {
         return sentEmailDto;
     }
 
-    public  List<SentEmailDto> findAllByEmail(String email){
+    public Page<SentEmailDto> findAllByEmail(String email, Pageable pageable){
         List<SentEmail> all = sentEmailRepository.findAllByEmail(email);
         List<SentEmailDto> sentEmailDto = new ArrayList<>();
         for(SentEmail s : all){
             if(s.getEmail().equals(email))
                 sentEmailDto.add(emailMapper.entityToDto(s));
         }
-        return sentEmailDto;
+        return new PageImpl<>(sentEmailDto);
     }
 
     public void editNotificationType(EmailNotificationDto dto){
